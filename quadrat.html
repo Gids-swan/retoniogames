@@ -3,6 +3,8 @@
 <html>
 <head>
     <script src="phaser.js"></script>
+	<script src="phaser-ui-tools.js"></script>
+	<script src="hotspot.js"></script>
 </head>
 <body>
 <script>
@@ -34,27 +36,14 @@ var prevDirection = null;
 
 var game = new Phaser.Game(config);
 
+var textStyle = {'fill': '#FFF', 'font': '16px Courier New'};
+
 function preload ()
 {
     this.load.image('bg', 'assets/mikecattelfield.jpg');
 	this.load.image('zoom', 'assets/zoom.svg');
 	this.load.image('zoom2', 'assets/zoomspotted.svg');
-}
-class Hotspot extends Phaser.GameObjects.Ellipse {
-	constructor(scene, x, y)
-	{
-		super(scene, x, y, 20, 20, 0xffd900);
-		
-		// On click do something
-		this.setInteractive().on('pointerdown', function(pointer, localX, localY, event) {
-			this.changeColour();
-		});
-		this.scene.add.existing(this);
-	}
-	
-	changeColour() {
-		this.fillColor = 0xff0000
-	}
+	this.load.image('btn', 'assets/blue-button-for-web.jpg');
 }
 
 function create ()
@@ -64,7 +53,9 @@ function create ()
 	bg.displayHeight = 600;
 	bg.setOrigin(0,0);
 	
-	
+	let txt = new uiWidgets.TextSprite(this, 10, 10, 'btn');
+	txt.setOrigin(0,0);
+	txt.setText("Click a Hotspot!", textStyle);
 	let hotspots = [];
 	//const length = 7;
 
