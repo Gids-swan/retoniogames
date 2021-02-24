@@ -6,9 +6,16 @@ var hotspotScene = new Phaser.Class({
     init: function() {},
     preload: function() {
 		this.load.image('flower', 'assets/yellow-flower-clipart.jpg');
+		this.load.image('back', 'assets/blue-button-240.jpg');
 	},
     create: function() {
        	this.add.rectangle(10, 10, 780, 580, 0x00FF00).setOrigin(0,0);
+		
+		let backBtn = this.add.image(0, 0, 'back');
+		backBtn.setOrigin(0,0);
+		backBtn.setInteractive().on('pointerdown', function(pointer, localX, localY, event) {
+			this.scene.scene.start("mapScene");
+		});
 	
 		let flowers = [];
 		//const length = 7;
