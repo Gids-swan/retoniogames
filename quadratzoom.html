@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="phaser.js"></script>
+</head>
+<body>
+<script>
+var config = {
+    type: Phaser.CANVAS,
+    width: 800,
+    height: 600,
+    parent: 'phaser-example',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 150 }
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create
+    }
+};
+
+var logo = null;
+
+var maxY = 0;
+var minY = 600;
+var lastY = 0;
+var duration = 0;
+var prevDuration = 0;
+var prevDirection = null;
+
+var game = new Phaser.Game(config);
+
+function preload ()
+{
+    this.load.image('flower', 'assets/yellow-flower-clipart.jpg');
+}
+/*
+class Hotspot extends Phaser.GameObjects.Ellipse {
+	constructor(scene, x, y)
+	{
+		super(scene, x, y, 20, 20, 0xffd900);
+		
+		// On click do something
+		this.setInteractive().on('pointerdown', function(pointer, localX, localY, event) {
+			this.changeColour();
+		});
+		this.scene.add.existing(this);
+	}
+	
+	changeColour() {
+		this.fillColor = 0xff0000
+	}
+}
+*/
+
+class Flower extends Phaser.GameObjects.Image {
+	
+	constructor(scene, x, y)
+	{
+		super(scene, x, y, 'flower');
+		this.displayWidth = 25;
+		this.displayHeight = 25;
+		this.setOrigin(0,0);
+		this.scene.add.existing(this);
+	}
+}
+
+class Quadrat extends Phaser.GameObjects.Ellipse {
+	//var quadrat = null;
+
+	constructor(scene, x, y)
+	{
+		super(scene, x, y, 30, 30, 0xFF0000);
+		
+		this.quadrat = scene.add.rectangle(x, y, 250, 250);
+		this.quadrat.setOrigin(0,0);
+		this.quadrat.isStroked = true;
+		this.quadrat.lineWidth = 5;
+		this.setInteractive();
+		
+		scene.add.existing(this);
+	}
+}
+
+function create ()
+{
+	this.add.rectangle(10, 10, 780, 580, 0x00FF00).setOrigin(0,0);
+	
+	let flowers = [];
+	//const length = 7;
+
+	for (i = 0; i < 7; i++) {
+		let w = 10 + (Math.random() * 755);
+		let h = 10 + (Math.random() * 555);
+		flowers[i] = new Flower(this, w, h);
+	}
+
+
+	for (let i = 1; i < 16; i++) {
+		let l = this.add.line(i*50, 10, 0, 0, 0, 580, 0x000000, 0.2);
+		l.setOrigin(0,0);
+		l.lineWidth = 5;
+	}
+	for (let i = 1; i < 12; i++) {
+		let l = this.add.line(10, i*50, 0, 0, 780, 0, 0x000000, 0.2);
+		l.setOrigin(0,0);
+		l.lineWidth = 5;
+	}
+	
+	new Quadrat(this, 275, 175);
+
+/*
+	quadrat = this.add.rectangle(275, 175, 250, 250);
+	quadrat.setOrigin(0,0);
+	quadrat.isStroked = true;
+	quadrat.lineWidth = 5;
+*/
+	
+	//this.input.setDefaultCursor('assets/zoom.svg, pointer');
+	// .cur files
+	
+	
+	
+	// Temp. cursor
+	zoom = this.add.image(0,0,'zoom');
+	zoom.setScale(0.1);
+	this.input.topOnly = true;
+	this.input.on('gameobjectmove', function (pointer, gameObject) {
+		zoom.x = pointer.x;
+		zoom.y = pointer.y;
+	});
+
+	
+    //logo = this.physics.add.image(400, 100, 'logo');
+
+    //logo.setOrigin(0.5, 0);
+    //logo.setVelocity(0, 60);
+    //logo.setBounce(1, 1);
+    //logo.setCollideWorldBounds(true);
+
+    //lastY = logo.y;
+
+    //text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
+
+    // this.physics.world.timeScale = 0.1;
+
+    //this.sys.events.on('postupdate', update, this);
+}
+
+function update (time, delta)
+{
+/*
+    text.setText([
+        'steps: ' + this.physics.world._lastCount,
+        'duration: ' + prevDuration,
+        'last y: ' + lastY,
+        'min y: ' + minY,
+        'max y: ' + maxY
+    ]);
+
+    if (Phaser.Math.Fuzzy.LessThan(logo.body.velocity.y, 0, 0.1))
+    {
+        direction = 'up';
+    }
+    else
+    {
+        direction = 'down';
+    }
+
+    if (prevDirection !== direction && prevDirection === 'up')
+    {
+        var marker = this.add.sprite(0, logo.y + 18, 'marker');
+
+        marker.setOrigin(0, 1);
+
+        lastY = logo.y;
+
+        prevDuration = duration;
+        duration = 0;
+    }
+
+    prevDirection = direction;
+    duration += delta;
+
+    minY = Math.min(minY, logo.y);
+    maxY = Math.max(minY, maxY, lastY);
+	*/
+}
+</script>
+</body>
+</html>
