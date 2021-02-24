@@ -6,6 +6,7 @@ class Hotspot extends Phaser.GameObjects.Ellipse {
 		// On click do something
 		this.setInteractive().on('pointerdown', function(pointer, localX, localY, event) {
 			this.changeColour();
+			scene.scene.start("hotspotScene");
 		});
 		this.scene.add.existing(this);
 	}
