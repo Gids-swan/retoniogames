@@ -9,7 +9,13 @@ class Quadrat extends Phaser.GameObjects.Ellipse {
 		this.quadrat.setOrigin(0,0);
 		this.quadrat.isStroked = true;
 		this.quadrat.lineWidth = 5;
-		this.setInteractive();
+		this.setInteractive( { draggable: true} );
+		this.on('drag', function(pointer, dragX, dragY) {
+			this.x = dragX;
+			this.quadrat.x = dragX;
+			this.y = dragY;
+			this.quadrat.y = dragY;
+		});
 		
 		scene.add.existing(this);
 	}
