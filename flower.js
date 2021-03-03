@@ -1,11 +1,31 @@
-class Flower extends Phaser.GameObjects.Image {
+class FlowerData {
 	static flowerTypes = ['yellow', 'blue', 'purple'];
-	static generateRandomFlower(scene) {
-		let type = flowerTypes[Math.floor(Math.random()*flowerTypes.length)];
+	static generateRandomFlower() {
+		let type = FlowerData.flowerTypes[Math.floor(Math.random()*FlowerData.flowerTypes.length)];
 		let x = 10 + (Math.random() * 755);
 		let y = 10 + (Math.random() * 555);
-		return new Flower(scene, x, y, type);
+		return new FlowerData(x, y, type);
 	}
+	
+	constructor(x, y, type) {
+		this.x = x
+		this.y = y
+		
+		switch(type) {
+			case 'yellow':
+			case 'blue':
+			case 'purple':
+				this.type = type
+				break;
+			
+			default:
+				this.type = 'yellow';
+				break;
+		}
+	}
+}
+
+class Flower extends Phaser.GameObjects.Image {
 	
 	constructor(scene, x, y, type)
 	{
@@ -13,15 +33,9 @@ class Flower extends Phaser.GameObjects.Image {
 		
 		switch(type) {
 			case 'yellow':
-				this.setTexture('yellow');
-				break;
-				
 			case 'blue':
-				this.setTexture('blue');
-				break;
-			
 			case 'purple':
-				this.setTexture('purple');
+				this.setTexture(type);
 				break;
 			
 			default:
