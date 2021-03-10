@@ -4,25 +4,25 @@ var hotspotScene = new Phaser.Class({
         Phaser.Scene.call(this, { "key": "hotspotScene" });
     },
     init: function(data) {
-		//console.log( data.hotspotClicked.x );
 	},
     preload: function() {
 		this.load.image('yellow', 'assets/yellow-flower-clipart.jpg');
 		this.load.image('blue', 'assets/blue-flower-clipart.jpg');
 		this.load.image('purple', 'assets/purple-flower-clipart.jpg');
-		this.load.image('back', 'assets/blue-button-240.jpg');
+		this.load.image('back', 'assets/backbutton.png');
 		this.load.image('arrowup', 'assets/arrowup.jpg');
 		this.load.image('arrowdown', 'assets/arrowdown.jpg');
 	},
-    create: function() {
+    create: function(data) {
        	this.add.rectangle(10, 10, 780, 580, 0x00FF00).setOrigin(0,0);
-		
-		let backBtn = this.add.image(0, 0, 'back');
+		console.log(data);
+		let backBtn = this.add.image(800, 550, 'back');
 		backBtn.setOrigin(0,0);
 		backBtn.setInteractive().on('pointerdown', function(pointer, localX, localY, event) {
-			this.scene.scene.start("mapScene");
+			this.scene.scene.start("mapScene", { hotspots : data.hotspots });
 		});
 	
+		/*
 		let flowers = [];
 
 		for (let i = 0; i < 4; i++) {
@@ -42,13 +42,21 @@ var hotspotScene = new Phaser.Class({
 			let h = 10 + (Math.random() * 555);
 			flowers[i] = new Flower(this, w, h, 'purple');
 		}
+		*/
+		
+		{
+			let sceneRef = this;
+			data.hotspotClicked.flowerData.forEach( function(value) {
+				value.createGameObject(sceneRef);
+			});
+		}
 
-		for (let i = 1; i < 16; i++) {
+		for (let i = 1; i < GRID_X_MAX; i++) {
 			let l = this.add.line(i*50, 10, 0, 0, 0, 580, 0x000000, 0.2);
 			l.setOrigin(0,0);
 			l.lineWidth = 5;
 		}
-		for (let i = 1; i < 12; i++) {
+		for (let i = 1; i < GRID_Y_MAX; i++) {
 			let l = this.add.line(10, i*50, 0, 0, 780, 0, 0x000000, 0.2);
 			l.setOrigin(0,0);
 			l.lineWidth = 5;
@@ -68,7 +76,12 @@ var hotspotScene = new Phaser.Class({
 			zoom.y = pointer.y;
 		});
 		
-		let button = new Counter(this, 0, 0, 'flower');
+		new Counter(this, 800, 0, 'yellow');
+		new Counter(this, 800, 170, 'blue');
+		new Counter(this, 800, 340, 'purple');
+		new Randomizer(this, 850, 510, 0, GRID_X_MAX);
+		new Randomizer(this, 900, 510, 0, GRID_Y_MAX);
+		
     },
     update: function() {}
 });
