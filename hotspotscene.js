@@ -81,6 +81,7 @@ var hotspotScene = new Phaser.Class({
 		new Counter(this, 800, 340, 'purple');
 		new Randomizer(this, 850, 510, 0, GRID_X_MAX);
 		new Randomizer(this, 900, 510, 0, GRID_Y_MAX);
+		new CheckButton(this, 900, 550);
 		
     },
     update: function() {}
