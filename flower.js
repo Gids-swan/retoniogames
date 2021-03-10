@@ -7,6 +7,7 @@ class FlowerData {
 		return new FlowerData(x, y, type);
 	}
 	
+	
 	constructor(x, y, type) {
 		this.x = x
 		this.y = y
@@ -22,6 +23,10 @@ class FlowerData {
 				this.type = 'yellow';
 				break;
 		}
+	}
+	
+	createGameObject(scene) {
+		return new Flower(scene, this.x, this.y, this.type);
 	}
 }
 
