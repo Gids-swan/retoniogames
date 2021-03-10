@@ -7,23 +7,11 @@ var mapScene = new Phaser.Class({
     initialize:
 
     function MyScene (config)
-    {
+    {	
         Phaser.Scene.call(this, { "key" : "mapScene" , hotspots : []});
     },
 
-    init: function (data) {
-		/* ----------------------------------------------------------------------------------
-		if (data.hotspots != []) {
-			this.hotspots = data.hotspots;
-		} else {
-			let i = 0;
-			for (i = 0; i < 7; i++) {
-				let w = 10 + (Math.random() * 790);
-				let h = 300 + (Math.random() * 290);
-				this.hotspots[i] = new Hotspot(this, w, h);
-			}
-		}
-		 ---------------------------------------------------------------------------------- */
+    init: function () {
 	},
     preload: function () {
 		this.load.image('bg', 'assets/mikecattelfield.jpg');
@@ -37,19 +25,25 @@ var mapScene = new Phaser.Class({
 		bg.displayHeight = 600;
 		bg.setOrigin(0,0);
 	
+	
 		let txt = new uiWidgets.TextSprite(this, 100, 100, 'btn');
 		txt.setText("Click a Hotspot!", textStyle);
 
-// ----------------------------------------------------------------------------------
-		let hotspots = [];
-		for (let i = 0; i < 7; i++) {
-				let w = 10 + (Math.random() * 790);
-				let h = 300 + (Math.random() * 290);
-				hotspots[i] = new Hotspot(this, w, h);
+		// Add hotspots to scene
+		this.hotspots = [];
+		
+		if (data.hotspots != undefined) {
+			this.hotspots = data.hotspots;
+			console.log("data found");
+			for (let i = 0; i < NUM_HOTSPOTS; i++) {
+				this.hotspots[i].createGameObject(this);
+			}
+		} else {
+			for (let i = 0; i < NUM_HOTSPOTS; i++) {
+				this.hotspots[i] = HotspotData.generateHotspot(this.hotspots);
+				this.hotspots[i].createGameObject(this);
+			}
 		}
-// ----------------------------------------------------------------------------------
-		//graphics = this.add.graphics(0, 0);
-		//graphics.lineStyle(2, 0xffd900, 1);
 			
 
 	
