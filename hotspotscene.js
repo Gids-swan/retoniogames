@@ -12,6 +12,9 @@ var hotspotScene = new Phaser.Class({
 		this.load.image('back', IMAGE_ASSET_PATH + '/backbutton.png');
 		this.load.image('arrowup', IMAGE_ASSET_PATH + '/arrowup.jpg');
 		this.load.image('arrowdown', IMAGE_ASSET_PATH + '/arrowdown.jpg');
+		this.load.image('arrowdown', IMAGE_ASSET_PATH + '/arrowdown.jpg');
+		this.load.image('arrowleft', IMAGE_ASSET_PATH + '/thinarrowleft.png');
+		this.load.image('arrowright', IMAGE_ASSET_PATH + '/thinarrowright.png');
 		
 		this.load.audio('click', SOUND_ASSET_PATH + '/mouse-click.wav');
 	},
@@ -26,7 +29,7 @@ var hotspotScene = new Phaser.Class({
 		{
 			let sceneRef = this;
 			data.hotspotClicked.flowerData.forEach( function(value) {
-				value.createGameObject(sceneRef);
+				sceneRef.add.flower(value.x, value.y, value.type);
 			});
 		}
 
