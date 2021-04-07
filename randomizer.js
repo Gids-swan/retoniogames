@@ -15,10 +15,10 @@ class Randomizer extends Phaser.GameObjects.Rectangle {
 		
 		this.setInteractive().on('pointerdown', function(pointer, localX, localY, event){
 			let valueX = Math.floor(Math.random() * ((GRID_X_MAX+1) - 0)) + 0;
-			this.countTextX.setText(value);
+			this.countTextX.setText(valueX);
 			
 			let valueY = Math.floor(Math.random() * ((GRID_Y_MAX+1) - 0)) + 0;
-			this.countTextY.setText(value);
+			this.countTextY.setText(valueY);
 		});
 	}
 }
