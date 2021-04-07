@@ -1,3 +1,11 @@
+Phaser.GameObjects.GameObjectFactory.register('flower', function (x, y, type) {
+	const ex = new Flower(this.scene, x, y, type);
+	
+	this.displayList.add(ex);
+	
+	return ex;
+});
+
 class FlowerData {
 	static flowerTypes = ['yellow', 'blue', 'purple'];
 	static generateRandomFlower() {
@@ -24,10 +32,6 @@ class FlowerData {
 				break;
 		}
 	}
-	
-	createGameObject(scene) {
-		return new Flower(scene, this.x, this.y, this.type);
-	}
 }
 
 class Flower extends Phaser.GameObjects.Image {
@@ -51,7 +55,6 @@ class Flower extends Phaser.GameObjects.Image {
 		this.displayWidth = 25;
 		this.displayHeight = 25;
 		this.setOrigin(0,0);
-		this.scene.add.existing(this);
 	}
 	
 	
