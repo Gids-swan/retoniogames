@@ -1,3 +1,11 @@
+Phaser.GameObjects.GameObjectFactory.register('hotspot', function (x, y, flowerArr, hotspotArr) {
+	const ex = new Hotspot(this.scene, x, y, flowerArr, hotspotArr, this.scene);
+	
+	this.displayList.add(ex);
+	
+	return ex;
+});
+
 class HotspotData {
 	static generateHotspot(hotspotArr) {
 		let w = 10 + (Math.random() * 790);
