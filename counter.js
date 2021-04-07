@@ -1,13 +1,13 @@
 class CounterButtonUp extends uiWidgets.TextButton {
 	constructor(scene, x, y, counter) {
-		super(scene, x+50, y+35, 'arrowup', function() {counter.increment();}, scene, 0, 0, 0, 0);
+		super(scene, x+50, y+35, 'arrowup', function() {counter.increment(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
 		this.scene.add.existing(this);
 	}
 }
 
 class CounterButtonDown extends uiWidgets.TextButton {
 	constructor(scene, x, y, counter) {
-		super(scene, x+50, y+35, 'arrowdown', function() {counter.decrement();}, scene, 0, 0, 0, 0);
+		super(scene, x+50, y+35, 'arrowdown', function() {counter.decrement(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
 		this.scene.add.existing(this);
 	}
 }

@@ -14,17 +14,16 @@ var mapScene = new Phaser.Class({
     init: function () {
 	},
     preload: function () {
-		this.load.image('bg', 'assets/mikecattelfield.jpg');
-		this.load.image('zoom', 'assets/zoom.svg');
-		this.load.image('zoom2', 'assets/zoomspotted.svg');
-		this.load.image('btn', 'assets/blue-button-240.jpg');
+		this.load.image('bg', IMAGE_ASSET_PATH + '/mikecattelfield.jpg');
+		this.load.image('zoom', IMAGE_ASSET_PATH + '/zoom.svg');
+		this.load.image('zoom2', IMAGE_ASSET_PATH + '/zoomspotted.svg');
+		this.load.image('btn', IMAGE_ASSET_PATH + '/blue-button-240.jpg');
 	},
     create: function (data) {
-		bg = this.add.image(0,0,'bg');
-		bg.displayWidth = 800;
-		bg.displayHeight = 600;
+		bg = this.add.image(GAME_PADDING,GAME_PADDING,'bg');
+		bg.displayWidth = GAME_WIDTH;
+		bg.displayHeight = GAME_HEIGHT;
 		bg.setOrigin(0,0);
-	
 	
 		let txt = new uiWidgets.TextSprite(this, 100, 100, 'btn');
 		txt.setText("Click a Hotspot!", textStyle);

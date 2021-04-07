@@ -6,43 +6,22 @@ var hotspotScene = new Phaser.Class({
     init: function(data) {
 	},
     preload: function() {
-		this.load.image('yellow', 'assets/yellow-flower-clipart.jpg');
-		this.load.image('blue', 'assets/blue-flower-clipart.jpg');
-		this.load.image('purple', 'assets/purple-flower-clipart.jpg');
-		this.load.image('back', 'assets/backbutton.png');
-		this.load.image('arrowup', 'assets/arrowup.jpg');
-		this.load.image('arrowdown', 'assets/arrowdown.jpg');
+		this.load.image('yellow', IMAGE_ASSET_PATH + '/yellow-flower-clipart.jpg');
+		this.load.image('blue', IMAGE_ASSET_PATH + '/blue-flower-clipart.jpg');
+		this.load.image('purple', IMAGE_ASSET_PATH + '/purple-flower-clipart.jpg');
+		this.load.image('back', IMAGE_ASSET_PATH + '/backbutton.png');
+		this.load.image('arrowup', IMAGE_ASSET_PATH + '/arrowup.jpg');
+		this.load.image('arrowdown', IMAGE_ASSET_PATH + '/arrowdown.jpg');
+		
+		this.load.audio('click', SOUND_ASSET_PATH + '/mouse-click.wav');
 	},
     create: function(data) {
-       	this.add.rectangle(10, 10, 780, 580, 0x00FF00).setOrigin(0,0);
-		console.log(data);
+       	this.add.rectangle(GAME_PADDING, GAME_PADDING, GAME_WIDTH, GAME_HEIGHT, 0x00FF00).setOrigin(0,0);
 		let backBtn = this.add.image(800, 550, 'back');
 		backBtn.setOrigin(0,0);
 		backBtn.setInteractive().on('pointerdown', function(pointer, localX, localY, event) {
 			this.scene.scene.start("mapScene", { hotspots : data.hotspots });
 		});
-	
-		/*
-		let flowers = [];
-
-		for (let i = 0; i < 4; i++) {
-			let w = 10 + (Math.random() * 755);
-			let h = 10 + (Math.random() * 555);
-			flowers[i] = new Flower(this, w, h, 'yellow');
-		}
-		
-		for (let i = 0; i < 4; i++) {
-			let w = 10 + (Math.random() * 755);
-			let h = 10 + (Math.random() * 555);
-			flowers[i] = new Flower(this, w, h, 'blue');
-		}
-		
-		for (let i = 0; i < 4; i++) {
-			let w = 10 + (Math.random() * 755);
-			let h = 10 + (Math.random() * 555);
-			flowers[i] = new Flower(this, w, h, 'purple');
-		}
-		*/
 		
 		{
 			let sceneRef = this;
@@ -52,12 +31,12 @@ var hotspotScene = new Phaser.Class({
 		}
 
 		for (let i = 1; i < GRID_X_MAX; i++) {
-			let l = this.add.line(i*50, 10, 0, 0, 0, 580, 0x000000, 0.2);
+			let l = this.add.line(GAME_PADDING + (i*50), GAME_PADDING, 0, 0, 0, GAME_HEIGHT, 0x000000, 0.2);
 			l.setOrigin(0,0);
 			l.lineWidth = 5;
 		}
 		for (let i = 1; i < GRID_Y_MAX; i++) {
-			let l = this.add.line(10, i*50, 0, 0, 780, 0, 0x000000, 0.2);
+			let l = this.add.line(GAME_PADDING, GAME_PADDING + (i*50), 0, 0, GAME_WIDTH, 0, 0x000000, 0.2);
 			l.setOrigin(0,0);
 			l.lineWidth = 5;
 		}
@@ -76,12 +55,15 @@ var hotspotScene = new Phaser.Class({
 			zoom.y = pointer.y;
 		});
 		
-		new Counter(this, 800, 0, 'yellow');
-		new Counter(this, 800, 170, 'blue');
-		new Counter(this, 800, 340, 'purple');
-		new Randomizer(this, 850, 510, 0, GRID_X_MAX);
-		new Randomizer(this, 900, 510, 0, GRID_Y_MAX);
-		new CheckButton(this, 900, 550);
+		let yCount = new Counter(this, PADDED_GAME_WIDTH, 0, 'yellow');
+		let bCount = new Counter(this, PADDED_GAME_WIDTH, 170, 'blue');
+		let pCount = new Counter(this, PADDED_GAME_WIDTH, 340, 'purple');
+		let randomizer = new Randomizer(this, 850, 510);
+		let check = new CheckButton(this, 900, 550);
+		
+		check.flowers = data.hotspotClicked.flowerData;
+		check.counters = [yCount, bCount, pCount];
+		check.randomizer = randomizer;
 		
     },
     update: function() {}
