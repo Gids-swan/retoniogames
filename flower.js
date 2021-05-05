@@ -10,8 +10,8 @@ class FlowerData {
 	static flowerTypes = ['yellow', 'blue', 'purple'];
 	static generateRandomFlower() {
 		let type = FlowerData.flowerTypes[Math.floor(Math.random()*FlowerData.flowerTypes.length)];
-		let x = 10 + (Math.random() * 755);
-		let y = 10 + (Math.random() * 555);
+		let x = (Math.random() * 755);
+		let y = (Math.random() * 555);
 		return new FlowerData(x, y, type);
 	}
 	
@@ -32,13 +32,28 @@ class FlowerData {
 				break;
 		}
 	}
+	
+	coordCheck(coords) {
+		let flowerLeft = (this.x)/50;
+		let flowerRight = (this.x + 25)/50;
+		let flowerTop = (this.y)/50;
+		let flowerBottom = (this.y + 25)/50;
+		
+		if (flowerRight >= coords[0] && flowerLeft <= coords[0]+QUADRAT_SIZE) {
+			if (flowerBottom >= coords[1] && flowerTop <= coords[1]+QUADRAT_SIZE) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
 
 class Flower extends Phaser.GameObjects.Image {
 	
 	constructor(scene, x, y, type)
 	{
-		super(scene, x, y, 'yellow');
+		super(scene, GAME_PADDING + x, y, 'yellow');
 		
 		switch(type) {
 			case 'yellow':
@@ -56,6 +71,4 @@ class Flower extends Phaser.GameObjects.Image {
 		this.displayHeight = 25;
 		this.setOrigin(0,0);
 	}
-	
-	
 }

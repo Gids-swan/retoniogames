@@ -1,22 +1,33 @@
-class Quadrat extends Phaser.GameObjects.Ellipse {
-	//var quadrat = null;
+Phaser.GameObjects.GameObjectFactory.register('quadrat', function (x, y) {
+	const ex = new Quadrat(this.scene, x, y);
+	
+	this.updateList.add(ex);
+	[ex.square, ex.circle].forEach(value => { ex.add(value, true); });
+	
+	return ex;
+});
+
+class Quadrat extends Phaser.GameObjects.Group {
 
 	constructor(scene, x, y)
 	{
-		super(scene, x, y, 30, 30, 0xFF0000);
+		super(scene);
 		
-		this.quadrat = scene.add.rectangle(x, y, 250, 250);
-		this.quadrat.setOrigin(0,0);
-		this.quadrat.isStroked = true;
-		this.quadrat.lineWidth = 5;
-		this.setInteractive( { draggable: true} );
-		this.on('drag', function(pointer, dragX, dragY) {
-			this.x = dragX;
-			this.quadrat.x = dragX;
-			this.y = dragY;
-			this.quadrat.y = dragY;
+		let q = new Phaser.GameObjects.Rectangle(scene, x, y, QUADRAT_SIZE * 50, QUADRAT_SIZE * 50);
+		q.setOrigin(0,0);
+		q.isStroked = true;
+		q.lineWidth = 5;
+		this.square = q;
+		
+		let c = new Phaser.GameObjects.Ellipse(scene, x, y, 30, 30, 0xFF0000);
+		c.setInteractive( { draggable: true} );
+		c.on('drag', function(pointer, dragX, dragY) {
+			c.x = dragX;
+			q.x = dragX;
+			c.y = dragY;
+			q.y = dragY;
 		});
-		
-		scene.add.existing(this);
+		this.circle = c;
+
 	}
 }

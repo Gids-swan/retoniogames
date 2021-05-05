@@ -1,24 +1,19 @@
-class CounterButtonUp extends uiWidgets.TextButton {
-	constructor(scene, x, y, counter) {
-		super(scene, x+50, y+35, 'arrowup', function() {counter.increment(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
-		this.scene.add.existing(this);
-	}
-}
-
-class CounterButtonDown extends uiWidgets.TextButton {
-	constructor(scene, x, y, counter) {
-		super(scene, x+50, y+35, 'arrowdown', function() {counter.decrement(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
-		this.scene.add.existing(this);
-	}
-}
-
-class Counter extends Phaser.GameObjects.Rectangle {
+Phaser.GameObjects.GameObjectFactory.register('counter', function (x, y, type) {
+	const ex = new Counter(this.scene, x, y, type);
 	
-	constructor(scene, x, y, type) {
-		super(scene, x, y, 225, 170, 0x785419);
-		this.setOrigin(0,0);
-		this.scene.add.existing(this);
-		this.count = 0
+	this.updateList.add(ex);
+	[ex.bg, ex.img, ex.textBg, ex.counterup, ex.counterdown, ex.countText].forEach(value => { ex.add(value, true); });
+	
+	return ex;
+});
+
+class Counter extends Phaser.GameObjects.Group {
+	
+	constructor(scene, x, y, type)
+	{
+		super(scene);
+		
+		this.count = 0;
 		
 		switch(type) {
 			case 'yellow':
@@ -32,14 +27,23 @@ class Counter extends Phaser.GameObjects.Rectangle {
 				break;
 		}
 		
-		this.imageDisplay = this.scene.add.image(x+10, y+10, this.type).setOrigin(0, 0);
-		this.imageDisplay.displayWidth = 100;
-		this.imageDisplay.displayHeight = 100;
+		let bg = new Phaser.GameObjects.Rectangle(scene, x, y, 225, 170, 0x785419);
+		bg.setOrigin(0,0);
+		this.bg = bg;
 		
-		this.scene.add.rectangle(x+10, y+110, 100, 50, 0x000000).setOrigin(0,0);
-		this.countText = this.scene.add.text(x+60, y+135, this.count, {'fill': '#FFF', 'font': '16px Courier New'});
-		this.countText.setAlign('center');
-		this.countText.setOrigin(0.5, 0.5);
+		let img = new Phaser.GameObjects.Image(scene, x+10, y+10, this.type);
+		img.setOrigin(0,0);
+		img.setDisplaySize(100, 100);
+		this.img = img;
+		
+		let textBg = new Phaser.GameObjects.Rectangle(scene, x+10, y+110, 100, 50, 0x000000)
+		textBg.setOrigin(0,0);
+		this.textBg = textBg;
+		
+		let countText = new Phaser.GameObjects.Text(scene, x+60, y+135, this.count, {'fill': '#FFF', 'font': '16px Courier New'});
+		countText.setAlign('center');
+		countText.setOrigin(0.5, 0.5);
+		this.countText = countText;
 		
 		this.counterup = new CounterButtonUp(scene, x+115, y+10, this);
 		this.counterdown = new CounterButtonDown(scene, x+115, y+90, this);
@@ -57,5 +61,19 @@ class Counter extends Phaser.GameObjects.Rectangle {
 			this.count -= 1;
 			this.countText.setText(this.count);
 		}
+	}
+	
+}
+
+
+class CounterButtonUp extends uiWidgets.TextButton {
+	constructor(scene, x, y, counter) {
+		super(scene, x+50, y+35, 'arrowup', function() {counter.increment(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
+	}
+}
+
+class CounterButtonDown extends uiWidgets.TextButton {
+	constructor(scene, x, y, counter) {
+		super(scene, x+50, y+35, 'arrowdown', function() {counter.decrement(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
 	}
 }
