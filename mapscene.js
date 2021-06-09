@@ -1,6 +1,21 @@
-var textStyle = {'fill': '#FFF', 'font': '16px Courier New'};
+require("./phaser.js");
+require("./game_sections.js");
+require("./UIToolExtensions.js");
+const HotspotStorage = require("./hotspot.js").HotspotStorage;
+const HotspotData = require("./hotspot.js").HotspotData;
+const GLOBAL = require("./global_constants.js");
+const IMAGE_PATH = GLOBAL.ASSET_PATHS.IMAGE;
+const GAME_WIDTH = GLOBAL.DISPLAY.GAME_WIDTH;
+const GAME_HEIGHT = GLOBAL.DISPLAY.GAME_HEIGHT;
+const GAME_PADDING = GLOBAL.DISPLAY.GAME_PADDING;
+const HELP = GLOBAL.STRINGS.HELP_DESCRIPTION_MAP_SCENE;
+const NUM_HOTSPOTS = GLOBAL.PARAMS.NUM_HOTSPOTS;
+const ZOOM_CURSOR = GLOBAL.CURSORS.ZOOM_CURSOR;
 
-var mapScene = new Phaser.Class({
+const textStyle = {'fill': '#FFF', 'font': '16px Courier New'};
+
+module.exports.mapScene = 
+new Phaser.Class({
 
     Extends: Phaser.Scene,
 
@@ -15,9 +30,9 @@ var mapScene = new Phaser.Class({
 		this.input.setDefaultCursor(ZOOM_CURSOR);
 	},
     preload: function () {
-		this.load.image('bg', IMAGE_ASSET_PATH + '/mikecattelfield.jpg');
-		this.load.image('btn', IMAGE_ASSET_PATH + '/blue-button-240.jpg');
-		this.load.image('closeBtn', IMAGE_ASSET_PATH + '/closeButton.png');
+		this.load.image('bg', IMAGE_PATH + '/mikecattelfield.jpg');
+		this.load.image('btn', IMAGE_PATH + '/helpbutton.png');
+		this.load.image('closeBtn', IMAGE_PATH + '/closeButton.png');
 	},
     create: function (data) {
 		// Area containers (see game_sections.js)
@@ -31,26 +46,33 @@ var mapScene = new Phaser.Class({
 		ga.add(bg);
 
 		// Add hotspots to scene
-		if (data.hotspots != undefined) {
+		if (data.hotspots != undefined) { // If hotspots already generated
 			this.hotspots = data.hotspots;
+
+			let allCompleted = true;
 			for (let i = 0; i < NUM_HOTSPOTS; i++) {
 				ga.add(this.add.hotspot(this.hotspots.get[i]));
+				
+				if (!this.hotspots.get[i].isCompleted)
+					allCompleted = false;
 			}
-		} else {
+			if (allCompleted)
+				console.log("All Completed! Well Done!");
+		} else { // Generate new hotspots otherwise
 			this.hotspots = new HotspotStorage([]);
 			for (let i = 0; i < NUM_HOTSPOTS; i++) {
 				this.hotspots.get[i] = HotspotData.generateHotspot(this.hotspots, i);
 				ga.add(this.add.hotspot(this.hotspots.get[i]));
 			}
 		}
-		console.log(this.hotspots);
 		
 		// 'How to Play' popup
 		let popup = this.add.popup(10,10,GAME_WIDTH-20,100);
 		ga.add(popup.getChildren());
 		popup.setTitleText("How To Play");
-		popup.setDescriptionText(HELP_DESCRIPTION_MAP_SCENE);
-		
+		popup.setDescriptionText(HELP);
+
+		let me = this;
 		// Popup button
 		uia.add(this.add.buttonex(0,GAME_PADDING,20,20, 'btn', function() {
 			popup.getChildren().forEach(value => {

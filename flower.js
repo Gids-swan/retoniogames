@@ -1,11 +1,17 @@
+require("./phaser.js");
+const GAME_PADDING = require("./global_constants.js").DISPLAY.GAME_PADDING;
+const QUADRAT_SIZE = require("./global_constants.js").PARAMS.QUADRAT_SIZE;
+const DISTANCE_UNIT = require("./global_constants.js").PARAMS.DISTANCE_UNIT;
+
 Phaser.GameObjects.GameObjectFactory.register('flower', function (x, y, type) {
-	const ex = new Flower(this.scene, x, y, type);
+	const ex = new module.exports.Flower(this.scene, x, y, type);
 	
 	this.displayList.add(ex);
 	
 	return ex;
 });
 
+module.exports.FlowerData = 
 class FlowerData {
 	static flowerTypes = ['yellow', 'blue', 'purple'];
 	static generateRandomFlower() {
@@ -34,10 +40,10 @@ class FlowerData {
 	}
 	
 	coordCheck(coords) {
-		let flowerLeft = (this.x)/50;
-		let flowerRight = (this.x + 25)/50;
-		let flowerTop = (this.y)/50;
-		let flowerBottom = (this.y + 25)/50;
+		let flowerLeft = (this.x) / DISTANCE_UNIT;
+		let flowerRight = (this.x + 25) / DISTANCE_UNIT;
+		let flowerTop = (this.y) / DISTANCE_UNIT;
+		let flowerBottom = (this.y + 25) / DISTANCE_UNIT;
 		
 		if (flowerRight >= coords[0] && flowerLeft <= coords[0]+QUADRAT_SIZE) {
 			if (flowerBottom >= coords[1] && flowerTop <= coords[1]+QUADRAT_SIZE) {
@@ -47,8 +53,9 @@ class FlowerData {
 		
 		return false;
 	}
-}
+};
 
+module.exports.Flower = 
 class Flower extends Phaser.GameObjects.Image {
 	
 	constructor(scene, x, y, type)
@@ -71,4 +78,4 @@ class Flower extends Phaser.GameObjects.Image {
 		this.displayHeight = 25;
 		this.setOrigin(0,0);
 	}
-}
+};

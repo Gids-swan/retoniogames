@@ -1,5 +1,8 @@
+require("./phaser.js");
+const FlowerData = require("./flower.js").FlowerData;
+
 Phaser.GameObjects.GameObjectFactory.register('checkbtn', function (x, y, hotspotsArr, hotspot, counters, randomizer) {
-	const ex = new CheckButton(this.scene, x, y, hotspotsArr, hotspot, counters, randomizer);
+	const ex = new module.exports.CheckButton(this.scene, x, y, hotspotsArr, hotspot, counters, randomizer);
 	
 	this.updateList.add(ex);
 	[ex.bg, ex.txt].forEach(value => { ex.add(value, true); });
@@ -7,6 +10,7 @@ Phaser.GameObjects.GameObjectFactory.register('checkbtn', function (x, y, hotspo
 	return ex;
 });
 
+module.exports.CheckButton = 
 class CheckButton extends Phaser.GameObjects.Group {
 	constructor(scene, x, y, hotspotStorage, id, countersArray, randomizer) {
 		super(scene);

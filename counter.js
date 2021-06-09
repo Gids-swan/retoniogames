@@ -1,5 +1,8 @@
+require("./phaser.js");
+const ButtonEX = require("./UIToolExtensions.js").ButtonEX;
+
 Phaser.GameObjects.GameObjectFactory.register('counter', function (x, y, type) {
-	const ex = new Counter(this.scene, x, y, type);
+	const ex = new module.exports.Counter(this.scene, x, y, type);
 	
 	this.updateList.add(ex);
 	[ex.bg, ex.img, ex.textBg, ex.counterup, ex.counterdown, ex.countText].forEach(value => { ex.add(value, true); });
@@ -7,6 +10,7 @@ Phaser.GameObjects.GameObjectFactory.register('counter', function (x, y, type) {
 	return ex;
 });
 
+module.exports.Counter = 
 class Counter extends Phaser.GameObjects.Group {
 	
 	constructor(scene, x, y, type)
@@ -45,8 +49,9 @@ class Counter extends Phaser.GameObjects.Group {
 		countText.setOrigin(0.5, 0.5);
 		this.countText = countText;
 		
-		this.counterup = new CounterButtonUp(scene, x+115, y+10, this);
-		this.counterdown = new CounterButtonDown(scene, x+115, y+90, this);
+		let me = this;
+		this.counterup = new ButtonEX(scene, x + 120, y + 10, 100, 70, 'arrowup', function () { me.increment(); scene.sound.play('click');});
+		this.counterdown = new ButtonEX(scene, x + 120, y + 90, 100, 70, 'arrowdown', function () { me.decrement(); scene.sound.play('click');});
 	}
 	
 	increment() {
@@ -63,17 +68,4 @@ class Counter extends Phaser.GameObjects.Group {
 		}
 	}
 	
-}
-
-
-class CounterButtonUp extends uiWidgets.TextButton {
-	constructor(scene, x, y, counter) {
-		super(scene, x+50, y+35, 'arrowup', function() {counter.increment(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
-	}
-}
-
-class CounterButtonDown extends uiWidgets.TextButton {
-	constructor(scene, x, y, counter) {
-		super(scene, x+50, y+35, 'arrowdown', function() {counter.decrement(); scene.sound.play('click');}, scene, 0, 0, 0, 0);
-	}
-}
+};

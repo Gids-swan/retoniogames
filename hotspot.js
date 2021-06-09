@@ -1,19 +1,33 @@
+require("./phaser.js");
+const FlowerData = require("./flower.js").FlowerData;
+const GLOBAL = require("./global_constants");
+const GAME_WIDTH = GLOBAL.DISPLAY.GAME_WIDTH;
+const MAX_FPH = GLOBAL.PARAMS.MAX_FLOWERS_PER_HOTSPOT;
+const MIN_FPH = GLOBAL.PARAMS.MIN_FLOWERS_PER_HOTSPOT;
+const QUADRAT_SIZE = GLOBAL.PARAMS.QUADRAT_SIZE;
+const GRID_X_MAX = GLOBAL.PARAMS.GRID_X_MAX;
+const GRID_Y_MAX = GLOBAL.PARAMS.GRID_Y_MAX;
+const QUADRAT_CHECKS_PER_HOTSPOT = GLOBAL.PARAMS.QUADRAT_CHECKS_PER_HOTSPOT;
+const ZOOM_ALERT_CURSOR = GLOBAL.CURSORS.ZOOM_ALERT_CURSOR;
+
 Phaser.GameObjects.GameObjectFactory.register('hotspot', function (hotspotData) {
 	let q = hotspotData;
 	
-	const ex = new Hotspot(this.scene, q.x, q.y, q.flowerArr, q.coordArr, q.hotspots, q.isCompleted, q.id);
+	const ex = new module.exports.Hotspot(this.scene, q.x, q.y, q.flowerArr, q.coordArr, q.hotspots, q.isCompleted, q.id);
 	
 	this.displayList.add(ex);
 	
 	return ex;
 });
 
+module.exports.HotspotStorage = 
 class HotspotStorage {
 	constructor(array) {
 		this.get = array;
 	}
-}
+};
 
+module.exports.HotspotData = 
 class HotspotData {
 	static generateHotspot(hotspotsArr, id) {
 		let w = Math.random() * GAME_WIDTH;
@@ -21,8 +35,8 @@ class HotspotData {
 		let flowerData = [];
 		let coordData = [];
 		
-		let range = MAX_FLOWERS_PER_HOTSPOT-MIN_FLOWERS_PER_HOTSPOT;
-		let numFlowers = Math.floor(Math.random() * (range+1))+MIN_FLOWERS_PER_HOTSPOT;
+		let range = MAX_FPH-MIN_FPH;
+		let numFlowers = Math.floor(Math.random() * (range + 1)) + MIN_FPH;
 		
 		
 		for (let i = 0; i < numFlowers; i++) {
@@ -47,8 +61,9 @@ class HotspotData {
 		this.isCompleted = isCompleted;
 		this.id = id;
 	}
-}
+};
 
+module.exports.Hotspot = 
 class Hotspot extends Phaser.GameObjects.Ellipse {
 	
 	constructor(scene, x, y, flowerArr, coordArr, hotspotStorage, isCompleted, id)
@@ -60,13 +75,14 @@ class Hotspot extends Phaser.GameObjects.Ellipse {
 		this.id = id;
 
 		if (isCompleted) {
-			console.log("Completed");
 			this.setFillStyle(0x00ff00);
-		}
 		
-		// On click do something
-		this.setInteractive({ cursor : ZOOM_ALERT_CURSOR }).on('pointerdown', function(pointer, localX, localY, event) {
-			scene.scene.start("hotspotScene", { hotspotClicked : id, hotspots : hotspotStorage });
-		});
+
+		} else {
+			// On click do something
+			this.setInteractive({ cursor : ZOOM_ALERT_CURSOR }).on('pointerdown', function(pointer, localX, localY, event) {
+				scene.scene.start("hotspotScene", { hotspotClicked : id, hotspots : hotspotStorage });
+			});
+		}
 	}
-}
+};

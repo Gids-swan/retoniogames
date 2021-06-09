@@ -1,4 +1,23 @@
-var hotspotScene = new Phaser.Class({
+require("./phaser.js");
+require("./UIToolExtensions.js");
+require("./flower.js");
+require("./quadrat.js");
+require("./counter.js");
+require("./randomizer.js");
+require("./checkbutton.js");
+const GLOBAL = require("./global_constants.js");
+const PATHS = GLOBAL.ASSET_PATHS;
+const GAME_WIDTH = GLOBAL.DISPLAY.GAME_WIDTH;
+const GAME_HEIGHT = GLOBAL.DISPLAY.GAME_HEIGHT;
+const GAME_PADDING = GLOBAL.DISPLAY.GAME_PADDING;
+const UI_WIDTH = GLOBAL.DISPLAY.UI_WIDTH;
+const HELP = GLOBAL.STRINGS.HELP_DESCRIPTION_HOTSPOT_SCENE;
+const GRID_X_MAX = GLOBAL.PARAMS.GRID_X_MAX;
+const GRID_Y_MAX = GLOBAL.PARAMS.GRID_Y_MAX;
+const DISTANCE_UNIT = GLOBAL.PARAMS.DISTANCE_UNIT;
+
+module.exports.hotspotScene =
+	new Phaser.Class({
     Extends: Phaser.Scene,
     initialize: function() {
         Phaser.Scene.call(this, { "key": "hotspotScene" });
@@ -6,16 +25,16 @@ var hotspotScene = new Phaser.Class({
     init: function(data) {
 	},
     preload: function() {
-		this.load.image('yellow', IMAGE_ASSET_PATH + '/yellow-flower-clipart.jpg');
-		this.load.image('blue', IMAGE_ASSET_PATH + '/blue-flower-clipart.jpg');
-		this.load.image('purple', IMAGE_ASSET_PATH + '/purple-flower-clipart.jpg');
-		this.load.image('back', IMAGE_ASSET_PATH + '/backbutton.png');
-		this.load.image('arrowup', IMAGE_ASSET_PATH + '/arrowup.jpg');
-		this.load.image('arrowdown', IMAGE_ASSET_PATH + '/arrowdown.jpg');
-		this.load.image('arrowleft', IMAGE_ASSET_PATH + '/thinarrowleft.png');
-		this.load.image('arrowright', IMAGE_ASSET_PATH + '/thinarrowright.png');
+		this.load.image('yellow', PATHS.IMAGE + '/yellow-flower-clipart.jpg');
+		this.load.image('blue', PATHS.IMAGE + '/blue-flower-clipart.jpg');
+		this.load.image('purple', PATHS.IMAGE + '/purple-flower-clipart.jpg');
+		this.load.image('back', PATHS.IMAGE + '/backbutton.png');
+		this.load.image('arrowup', PATHS.IMAGE + '/arrowup.jpg');
+		this.load.image('arrowdown', PATHS.IMAGE + '/arrowdown.jpg');
+		this.load.image('arrowleft', PATHS.IMAGE + '/thinarrowleft.png');
+		this.load.image('arrowright', PATHS.IMAGE + '/thinarrowright.png');
 		
-		this.load.audio('click', SOUND_ASSET_PATH + '/mouse-click.wav');
+		this.load.audio('click', PATHS.SOUND + '/mouse-click.wav');
 	},
     create: function(data) {
 		// Create containers
@@ -27,10 +46,10 @@ var hotspotScene = new Phaser.Class({
 		
 		// Grid lines for game area
 		for (let i = 1; i < GRID_X_MAX; i++) {
-			ga.add(this.add.gridlineex(i*50, 0, 0, 0, 0, GAME_HEIGHT));
+			ga.add(this.add.gridlineex(i * DISTANCE_UNIT, 0, 0, 0, 0, GAME_HEIGHT));
 		}
 		for (let i = 1; i < GRID_Y_MAX; i++) {
-			ga.add(this.add.gridlineex(0, i*50, 0, 0, GAME_WIDTH, 0));
+			ga.add(this.add.gridlineex(0, i * DISTANCE_UNIT, 0, 0, GAME_WIDTH, 0));
 		}
 		
 		// Back button for UI area
@@ -63,7 +82,7 @@ var hotspotScene = new Phaser.Class({
 		let popup = this.add.popup(10,10,GAME_WIDTH-20,100);
 		ga.add(popup.getChildren());
 		popup.setTitleText("How To Play");
-		popup.setDescriptionText(HELP_DESCRIPTION_HOTSPOT_SCENE);
+		popup.setDescriptionText(HELP);
 		
 		// Popup button
 		uia.add(this.add.buttonex(0,GAME_PADDING,20,20, 'btn', function() {
