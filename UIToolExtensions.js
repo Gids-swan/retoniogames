@@ -68,9 +68,9 @@ module.exports.PopupEX =
 class PopupEX extends Phaser.GameObjects.Group {
 	constructor(scene, x, y, width, height) {
 		super(scene);
-		let font = {'fill': '#000', 'font': '16px Courier New'};
+		let font = {'fill': '0xffffff', 'font': '16px Courier New'};
 		
-		let bg = new Phaser.GameObjects.Rectangle(scene, x, y, width, height, 0x777777);
+		let bg = new Phaser.GameObjects.Rectangle(scene, x, y, width, height, 0xCCCCCC);
 		bg.setOrigin(0,0);
 		this.bg = bg;
 
