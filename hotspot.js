@@ -68,18 +68,21 @@ class Hotspot extends Phaser.GameObjects.Ellipse {
 	
 	constructor(scene, x, y, flowerArr, coordArr, hotspotStorage, isCompleted, id)
 	{
-		super(scene, x, y, 20, 20, 0xffd900);
+		super(scene, x, y, 20, 20, 0xff003a);
 		this.flowerData = flowerArr;
 		this.coordData = coordArr;
 		this.isCompleted = isCompleted;
 		this.id = id;
 
 		if (isCompleted) {
-			this.setFillStyle(0x00ff00);
+			this.setFillStyle(0x0021db);
 		
-
+			// On hover show stats	// TODO CHANGE TO SHOW A POPUP WITH STATS
+			this.setInteractive({ cursor : ZOOM_ALERT_CURSOR }).on('pointerdown', function(pointer, localX, localY, event) {
+				scene.scene.start("hotspotScene", { hotspotClicked : id, hotspots : hotspotStorage });
+			});
 		} else {
-			// On click do something
+			// On click start new scene
 			this.setInteractive({ cursor : ZOOM_ALERT_CURSOR }).on('pointerdown', function(pointer, localX, localY, event) {
 				scene.scene.start("hotspotScene", { hotspotClicked : id, hotspots : hotspotStorage });
 			});
