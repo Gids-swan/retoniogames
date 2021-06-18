@@ -1,3 +1,0 @@
-C:\Users\invate\Documents\GitHub\retoniogames\obj\Debug\Retonio.njsprojAssemblyReference.cache
-C:\Users\invate\Documents\GitHub\retoniogames\obj\Debug\Retonio.njsproj.CoreCompileInputs.cache
-C:\Users\invate\Documents\GitHub\retoniogames\bin\Microsoft.NodejsTools.WebRole.dll
