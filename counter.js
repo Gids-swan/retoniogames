@@ -1,11 +1,15 @@
 require("./phaser.js");
 const ButtonEX = require("./UIToolExtensions.js").ButtonEX;
+const COUNTER_MAX = require("./global_constants.js").PARAMS.MAX_FLOWERS_PER_HOTSPOT * require("./global_constants.js").PARAMS.NUM_HOTSPOTS;
 
 Phaser.GameObjects.GameObjectFactory.register('counter', function (x, y, type) {
 	const ex = new module.exports.Counter(this.scene, x, y, type);
 	
 	this.updateList.add(ex);
-	[ex.bg, ex.img, ex.textBg, ex.counterup, ex.counterdown, ex.countText].forEach(value => { ex.add(value, true); });
+	if (ex.type != null)
+		[ex.bg, ex.img, ex.textBg, ex.counterup, ex.counterdown, ex.countText].forEach(value => { ex.add(value, true); });
+	else
+		[ex.bg, ex.textBg, ex.counterup, ex.counterdown, ex.countText].forEach(value => { ex.add(value, true); });
 	
 	return ex;
 });
@@ -23,11 +27,11 @@ class Counter extends Phaser.GameObjects.Group {
 			case 'yellow':
 			case 'blue':
 			case 'purple':
-				this.type = type
+				this.type = type;
 				break;
 			
 			default:
-				this.type = 'yellow';
+				this.type = null;
 				break;
 		}
 		
@@ -35,19 +39,32 @@ class Counter extends Phaser.GameObjects.Group {
 		bg.setOrigin(0,0);
 		this.bg = bg;
 		
-		let img = new Phaser.GameObjects.Image(scene, x+10, y+10, this.type);
-		img.setOrigin(0,0);
-		img.setDisplaySize(100, 100);
-		this.img = img;
+		if (this.type != null) {
+			let img = new Phaser.GameObjects.Image(scene, x+10, y+10, this.type);
+			img.setOrigin(0,0);
+			img.setDisplaySize(100, 100);
+			this.img = img;
+			
+			let textBg = new Phaser.GameObjects.Rectangle(scene, x+10, y+110, 100, 50, 0x000000)
+			textBg.setOrigin(0,0);
+			this.textBg = textBg;
 		
-		let textBg = new Phaser.GameObjects.Rectangle(scene, x+10, y+110, 100, 50, 0x000000)
-		textBg.setOrigin(0,0);
-		this.textBg = textBg;
+			let countText = new Phaser.GameObjects.Text(scene, x+60, y+135, this.count, {'fill': '#FFF', 'font': '16px Courier New'});
+			countText.setAlign('center');
+			countText.setOrigin(0.5, 0.5);
+			this.countText = countText;
+		} else {
+			
+			// No image used, different position.
+			let textBg = new Phaser.GameObjects.Rectangle(scene, x+10, y+60, 100, 50, 0x000000)
+			textBg.setOrigin(0,0);
+			this.textBg = textBg;
 		
-		let countText = new Phaser.GameObjects.Text(scene, x+60, y+135, this.count, {'fill': '#FFF', 'font': '16px Courier New'});
-		countText.setAlign('center');
-		countText.setOrigin(0.5, 0.5);
-		this.countText = countText;
+			let countText = new Phaser.GameObjects.Text(scene, x+60, y+85, this.count, {'fill': '#FFF', 'font': '16px Courier New'});
+			countText.setAlign('center');
+			countText.setOrigin(0.5, 0.5);
+			this.countText = countText;
+		}
 		
 		let me = this;
 		this.counterup = new ButtonEX(scene, x + 120, y + 10, 100, 70, 'arrowup', function () { me.increment(); scene.sound.play('click');});
@@ -55,7 +72,7 @@ class Counter extends Phaser.GameObjects.Group {
 	}
 	
 	increment() {
-		if (this.count < 20) {
+		if (this.count < COUNTER_MAX) {
 			this.count += 1;
 			this.countText.setText(this.count);
 		}
@@ -66,6 +83,15 @@ class Counter extends Phaser.GameObjects.Group {
 			this.count -= 1;
 			this.countText.setText(this.count);
 		}
+	}
+	
+	setCount(num) {
+		if (num < 0)
+			this.count = 0;
+		else
+			this.count = num;
+		
+		this.countText.setText(this.count);
 	}
 	
 };

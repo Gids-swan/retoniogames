@@ -25,7 +25,7 @@ module.exports.Quadrat =
 			this.square = q;
 
 			// Clickable Circle
-			let c = new Phaser.GameObjects.Ellipse(scene, x, y, 30, 30, 0xFF0000);
+			let c = new Phaser.GameObjects.Ellipse(scene, x, y, 30, 30, 0xFF0801);
 			c.setInteractive({ draggable: true });
 			c.on('drag', function (pointer, dragX, dragY) {
 				c.x = dragX;

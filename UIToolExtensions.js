@@ -8,6 +8,17 @@ Phaser.GameObjects.GameObjectFactory.register('buttonex', function (x, y, width,
 	return ex;
 });
 
+Phaser.GameObjects.GameObjectFactory.register('textbuttonex', function constructor(x, y, width, height, text, callback) {
+	const ex = new module.exports.TextButtonEX(this.scene, x, y, width, height, text, callback);
+	
+	this.updateList.add(ex);
+	[ex.bg, ex.txt].forEach(value => { 
+		ex.add(value, true); 
+	});
+	
+	return ex;
+});
+
 Phaser.GameObjects.GameObjectFactory.register('centredtextex', function (x, y, text, style) {
 	const ex = new module.exports.CentredTextEX(this.scene, x, y, text, style);
 	
@@ -43,6 +54,35 @@ class ButtonEX extends Phaser.GameObjects.Image {
 		this.setOrigin(0,0);
 		
 		this.setInteractive().on('pointerdown', callback);
+	}
+}
+
+module.exports.TextButtonEX = 
+class TextButtonEX extends Phaser.GameObjects.Group {
+	constructor(scene, x, y, width, height, text, callback) {
+		super(scene);
+		
+		let font = {'fill': '0xffffff', 'font': '16px Courier New'};
+		
+		let bg = new Phaser.GameObjects.Rectangle(scene, x, y, width, height, 0xCCCCCC);
+		bg.setOrigin(0,0);
+		this.bg = bg;
+		
+		this.txt = new module.exports.CentredTextEX(scene, x + (width/2), y + (height/2), text, font);
+		
+		this.bg.setInteractive().on('pointerdown', callback);
+	}
+	
+	setBackgroundColour(hex) {
+		this.bg.setFillStyle(hex);
+	}
+	
+	setBackgroundColour(hex, alpha) {
+		this.bg.setFillStyle(hex, alpha);
+	}
+	
+	setTextColour(hex) {
+		this.txt.setColor(hex);
 	}
 }
 
@@ -86,9 +126,7 @@ class PopupEX extends Phaser.GameObjects.Group {
 		
 		let me = this;
 		let exit = new module.exports.ButtonEX(scene, x+width-30, y, 30, 30, 'closeBtn', function() {
-			[me.bg, me.title, me.desc, me.exit].forEach(value => { 
-				me.killAndHide(value);
-			});
+			me.close();
 		});
 		this.exit = exit;
 	}
@@ -99,5 +137,18 @@ class PopupEX extends Phaser.GameObjects.Group {
 	
 	setDescriptionText(txt) {
 		this.desc.setText(txt);
+	}
+	
+	close() {
+		let me = this;
+		me.getChildren().forEach(value => { 
+				me.killAndHide(value);
+		});
+	}
+	
+	open() {
+		this.getChildren().forEach(value => { 
+				value.setActive(true).setVisible(true);
+		});
 	}
 }

@@ -10,6 +10,7 @@ Phaser.GameObjects.GameObjectFactory.register('checkbtn', function (x, y, hotspo
 	return ex;
 });
 
+// This could be changed to extend from TextButtonEX
 module.exports.CheckButton = 
 class CheckButton extends Phaser.GameObjects.Group {
 	constructor(scene, x, y, hotspotStorage, id, countersArray, randomizer) {
@@ -20,11 +21,12 @@ class CheckButton extends Phaser.GameObjects.Group {
 		this.randomizer = randomizer;
 		
 		let me = this;
-		let bg = new Phaser.GameObjects.Rectangle(scene, x, y, 70, 50, 0x00FF00);
+		let bg = new Phaser.GameObjects.Rectangle(scene, x, y, 80, 30, 0x00FF00);
 		bg.setOrigin(0,0);
 		bg.setInteractive().on('pointerdown', function(pointer, localX, localY, event){
 			if (me.check()) {
 				hotspotStorage.get[id].isCompleted = true;
+				hotspotStorage.get[id].results = me.results;
 				me.scene.scene.start("mapScene", { hotspots : hotspotStorage });
 			} else {
 				console.log("Oh no!");
@@ -33,7 +35,7 @@ class CheckButton extends Phaser.GameObjects.Group {
 		});
 		this.bg = bg;
 		
-		let txt = new Phaser.GameObjects.Text(scene, x+35, y+25, "Check", {'fill': '#000', 'font': '16px Courier New'});
+		let txt = new Phaser.GameObjects.Text(scene, x+40, y+15, "Check", {'fill': '#000', 'font': '16px Courier New'});
 		txt.setAlign('center');
 		txt.setOrigin(0.5, 0.5);
 		this.txt = txt;
